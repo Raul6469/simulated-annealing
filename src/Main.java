@@ -7,6 +7,7 @@ public class Main {
     public static void main(String[] args) {
         ArrayList<int[]> connections = readEdgeListFile("src/edge-list.txt");
         int[][] adjacencyMatrix = createAdjacencyMatrix(connections);
+        generateRandomOrdering(adjacencyMatrix.length);
     }
 
     public static ArrayList<int[]> readEdgeListFile(String filePath) {
@@ -59,6 +60,23 @@ public class Main {
         }
 
         return adjacencyMatrix;
+    }
+
+    public static int[] generateRandomOrdering(int nbNodes) {
+        int[] randomOrdering = new int[nbNodes];
+
+        ArrayList<Integer> nodes = new ArrayList<>();
+
+        for(int i = 0; i<nbNodes; i++) {
+            nodes.add(i);
+        }
+
+        for(int i = 0; i<nbNodes; i++) {
+            int randomIndex = (int) (Math.random() * nodes.size());
+            randomOrdering[i] = nodes.remove(randomIndex);
+        }
+
+        return randomOrdering;
     }
 
     public static void printMatrix(int[][] matrix) {
