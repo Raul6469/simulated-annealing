@@ -1,13 +1,20 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
         ArrayList<int[]> connections = readEdgeListFile("GA2018-19.txt");
         int[][] adjacencyMatrix = createAdjacencyMatrix(connections);
-        generateRandomOrdering(adjacencyMatrix.length);
+        printMatrix(adjacencyMatrix);
+
+        Scanner reader = new Scanner(System.in);
+        reader.nextLine();
+
+        int[] randomOrdering = generateRandomOrdering(adjacencyMatrix.length);
+        printArray(randomOrdering);
     }
 
     public static ArrayList<int[]> readEdgeListFile(String filePath) {
@@ -81,10 +88,14 @@ public class Main {
 
     public static void printMatrix(int[][] matrix) {
         for(int[] row : matrix) {
-            for(int value : row) {
-                System.out.print(value + " ");
-            }
-            System.out.println();
+            printArray(row);
         }
+    }
+
+    public static void printArray(int[] array) {
+        for(int value: array) {
+            System.out.print(value + " ");
+        }
+        System.out.println();
     }
 }
