@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Main {
 
     public static void main(String[] args) {
-        ArrayList<int[]> connections = readEdgeListFile("src/edge-list.txt");
+        ArrayList<int[]> connections = readEdgeListFile("GA2018-19.txt");
         int[][] adjacencyMatrix = createAdjacencyMatrix(connections);
         generateRandomOrdering(adjacencyMatrix.length);
     }
