@@ -6,6 +6,7 @@ public class Main {
 
     public static void main(String[] args) {
         ArrayList<int[]> connections = readEdgeListFile("src/edge-list.txt");
+        int[][] adjacencyMatrix = createAdjacencyMatrix(connections);
     }
 
     public static ArrayList<int[]> readEdgeListFile(String filePath) {
@@ -35,5 +36,37 @@ public class Main {
         }
 
         return connections;
+    }
+
+    public static int[][] createAdjacencyMatrix(ArrayList<int[]> connections) {
+        int nbNodes = 0;
+
+        for(int[] connection : connections) {
+            for(int node : connection) {
+                if(node > nbNodes) {
+                    nbNodes = node;
+                }
+            }
+        }
+
+        nbNodes++; // Because node 0 exists
+
+        int[][] adjacencyMatrix = new int[nbNodes][nbNodes];
+
+        for(int[] connection : connections) {
+            adjacencyMatrix[connection[0]][connection[1]] = 1;
+            adjacencyMatrix[connection[1]][connection[0]] = 1;
+        }
+
+        return adjacencyMatrix;
+    }
+
+    public static void printMatrix(int[][] matrix) {
+        for(int[] row : matrix) {
+            for(int value : row) {
+                System.out.print(value + " ");
+            }
+            System.out.println();
+        }
     }
 }
