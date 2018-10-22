@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
 
@@ -13,8 +12,8 @@ public class Main {
         Scanner reader = new Scanner(System.in);
         reader.nextLine();
 
-        int[] randomOrdering = generateRandomOrdering(adjacencyMatrix.length);
-        printArray(randomOrdering);
+        Ordering initialOrdering = new Ordering(adjacencyMatrix.length);
+        initialOrdering.printOrdering();
     }
 
     public static ArrayList<int[]> readEdgeListFile(String filePath) {
@@ -69,23 +68,6 @@ public class Main {
         return adjacencyMatrix;
     }
 
-    public static int[] generateRandomOrdering(int nbNodes) {
-        int[] randomOrdering = new int[nbNodes];
-
-        ArrayList<Integer> nodes = new ArrayList<>();
-
-        for(int i = 0; i<nbNodes; i++) {
-            nodes.add(i);
-        }
-
-        for(int i = 0; i<nbNodes; i++) {
-            int randomIndex = (int) (Math.random() * nodes.size());
-            randomOrdering[i] = nodes.remove(randomIndex);
-        }
-
-        return randomOrdering;
-    }
-
     public static void printMatrix(int[][] matrix) {
         for(int[] row : matrix) {
             printArray(row);
@@ -98,4 +80,37 @@ public class Main {
         }
         System.out.println();
     }
+}
+
+class Ordering {
+    private ArrayList<Node> nodes;
+
+    public Ordering(int nbNodes) {
+        this.nodes = new ArrayList<>();
+        this.setInitialOrdering(nbNodes);
+    }
+
+    private void setInitialOrdering(int nbNodes) {
+        for(int i = 0; i<nbNodes; i++) {
+            Node node = new Node();
+            node.number = i;
+            this.nodes.add(node);
+        }
+
+        Collections.shuffle(this.nodes);
+    }
+
+    public void printOrdering() {
+        for(Node node : this.nodes) {
+            System.out.print(node.number + " ");
+        }
+
+        System.out.println();
+    }
+}
+
+class Node {
+    int number;
+    double x;
+    double y;
 }
