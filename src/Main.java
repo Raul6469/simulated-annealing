@@ -14,6 +14,8 @@ public class Main {
 
         Ordering initialOrdering = new Ordering(adjacencyMatrix.length);
         initialOrdering.printOrdering();
+
+        System.out.println(initialOrdering.fitness(adjacencyMatrix));
     }
 
     public static ArrayList<int[]> readEdgeListFile(String filePath) {
@@ -100,6 +102,43 @@ class Ordering {
         Collections.shuffle(this.nodes);
     }
 
+    private void setNodeCoordinates() {
+        double chunk = 2 * Math.PI / 2;
+
+        for(int i = 0; i < this.nodes.size(); i++) {
+            this.nodes.get(i).x = Math.cos(i * chunk);
+            this.nodes.get(i).y = Math.sin(i * chunk);
+        }
+    }
+
+    public double fitness(int[][] adjacencyMatrix) {
+        double totalDistance = 0;
+
+        this.setNodeCoordinates();
+
+        for(int i = 0; i < this.nodes.size(); i++) {
+            for(int j = 0; j < this.nodes.size(); j++) {
+                if(adjacencyMatrix[i][j] == 1) {
+                    Node a = this.findNodeNumber(i);
+                    Node b = this.findNodeNumber(j);
+
+                    totalDistance += a.distanceTo(b);
+                }
+            }
+        }
+
+        return totalDistance/2;
+    }
+
+    private Node findNodeNumber(int nb) {
+        for(Node node : this.nodes) {
+            if(node.number == nb) {
+                return node;
+            }
+        }
+        return null;
+    }
+
     public void printOrdering() {
         for(Node node : this.nodes) {
             System.out.print(node.number + " ");
@@ -113,4 +152,8 @@ class Node {
     int number;
     double x;
     double y;
+
+    public double distanceTo(Node b) {
+        return Math.sqrt( Math.pow(b.x - this.x, 2) + Math.pow(b.y - this.y, 2) );
+    }
 }
