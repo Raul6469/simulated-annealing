@@ -130,6 +130,18 @@ class Ordering {
         return totalDistance/2;
     }
 
+    public void mutate() {
+        int a, b;
+        do {
+            a = (int) Math.floor(Math.random() * this.nodes.size());
+            b = (int) Math.floor(Math.random() * this.nodes.size());
+        } while (a == b);
+
+        Node temp = this.nodes.get(a);
+        this.nodes.set(a, this.nodes.get(b));
+        this.nodes.set(b, temp);
+    }
+
     private Node findNodeNumber(int nb) {
         for(Node node : this.nodes) {
             if(node.number == nb) {
