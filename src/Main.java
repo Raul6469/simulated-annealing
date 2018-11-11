@@ -1,3 +1,5 @@
+import javax.swing.*;
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.*;
@@ -18,6 +20,7 @@ public class Main {
 
         Ordering finalOrdering = simulatedAnnealing.run();
         System.out.println(finalOrdering.fitness(adjacencyMatrix));
+        new VizWindow(adjacencyMatrix, finalOrdering);
     }
 
     public static ArrayList<int[]> readEdgeListFile(String filePath) {
@@ -190,6 +193,10 @@ class Ordering {
         return null;
     }
 
+    public ArrayList<Node> getOrdering() {
+        return this.nodes;
+    }
+
     public void printOrdering() {
         for(Node node : this.nodes) {
             System.out.print(node.number + " ");
@@ -206,5 +213,43 @@ class Node {
 
     public double distanceTo(Node b) {
         return Math.sqrt( Math.pow(b.x - this.x, 2) + Math.pow(b.y - this.y, 2) );
+    }
+}
+
+class VizWindow extends JFrame {
+    int adj [][];
+    int v = 0;
+    Ordering ordering;
+    double chunk;
+
+    public VizWindow(int[][] adj, Ordering ordering) {
+        this.adj = adj;
+        this.ordering = ordering;
+        this.chunk = 2*Math.PI/this.ordering.getOrdering().size();
+        this.v = this.ordering.getOrdering().size();
+        setTitle("AI");
+        setSize(960, 960);
+        setVisible(true);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    }
+
+    public void paint(Graphics g) {
+        int radius = 100;
+        int mov = 200;
+
+        double w = v;
+
+        for(int i = 0; i<v; i++) {
+            for(int j = i+1; j<v; j++) {
+                if(adj[ordering.getOrdering().get(i).number][ordering.getOrdering().get(j).number] == 1) {
+                    g.drawLine(
+                            (int)(((double) Math.cos(i*chunk))*radius + mov),
+                            (int)(((double) Math.sin(i*chunk))*radius + mov),
+                            (int)(((double) Math.cos(j*chunk))*radius + mov),
+                            (int)(((double) Math.sin(j*chunk))*radius + mov)
+                    );
+                }
+            }
+        }
     }
 }
