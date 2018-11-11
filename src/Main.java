@@ -9,13 +9,15 @@ public class Main {
         int[][] adjacencyMatrix = createAdjacencyMatrix(connections);
         printMatrix(adjacencyMatrix);
 
-        Scanner reader = new Scanner(System.in);
-        reader.nextLine();
-
         Ordering initialOrdering = new Ordering(adjacencyMatrix.length);
         initialOrdering.printOrdering();
 
         System.out.println(initialOrdering.fitness(adjacencyMatrix));
+
+        SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing(adjacencyMatrix, initialOrdering, 10, 0.5);
+
+        Ordering finalOrdering = simulatedAnnealing.run();
+        System.out.println(finalOrdering.fitness(adjacencyMatrix));
     }
 
     public static ArrayList<int[]> readEdgeListFile(String filePath) {
@@ -84,12 +86,49 @@ public class Main {
     }
 }
 
+class SimulatedAnnealing {
+    private Ordering ordering;
+    private int[][] adjacencyMatrix;
+    private double temperature;
+    private double coolingRate;
+
+    public SimulatedAnnealing(int[][] adjacencyMatrix, Ordering ordering, double temperature, double coolingRate) {
+        this.ordering = ordering;
+        this.adjacencyMatrix = adjacencyMatrix;
+        this.temperature = temperature;
+        this.coolingRate = coolingRate;
+    }
+
+    public Ordering run() {
+        while(this.temperature > 0) {
+            this.iterate();
+        }
+        return this.ordering;
+    }
+
+    private void iterate() {
+        Ordering newOrdering = new Ordering(this.ordering);
+        for(int i = 0; i<this.temperature; i++) {
+            newOrdering.mutate();
+        }
+
+        if(newOrdering.fitness(this.adjacencyMatrix) < this.ordering.fitness(this.adjacencyMatrix)) {
+            this.ordering = new Ordering(newOrdering);
+            this.temperature = Math.floor(this.temperature - this.coolingRate);
+        }
+    }
+}
+
 class Ordering {
     private ArrayList<Node> nodes;
 
     public Ordering(int nbNodes) {
         this.nodes = new ArrayList<>();
         this.setInitialOrdering(nbNodes);
+    }
+
+    public Ordering(Ordering ordering) {
+        this.nodes = new ArrayList<>(ordering.nodes);
     }
 
     private void setInitialOrdering(int nbNodes) {
