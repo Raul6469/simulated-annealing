@@ -16,11 +16,12 @@ public class Main {
 
         System.out.println(initialOrdering.fitness(adjacencyMatrix));
 
-        SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing(adjacencyMatrix, initialOrdering, 10, 0.5);
+        SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing(adjacencyMatrix, initialOrdering, 5, 0.005);
 
         Ordering finalOrdering = simulatedAnnealing.run();
         System.out.println(finalOrdering.fitness(adjacencyMatrix));
-        new VizWindow(adjacencyMatrix, finalOrdering);
+        new VizWindow(adjacencyMatrix, initialOrdering, "Initial");
+        new VizWindow(adjacencyMatrix, finalOrdering, "Final");
     }
 
     public static ArrayList<int[]> readEdgeListFile(String filePath) {
@@ -94,17 +95,22 @@ class SimulatedAnnealing {
     private int[][] adjacencyMatrix;
     private double temperature;
     private double coolingRate;
+    private ArrayList<Double> history;
+    private final int MAX_ITERATIONS = 100000;
+    private int iterations = 0;
 
     public SimulatedAnnealing(int[][] adjacencyMatrix, Ordering ordering, double temperature, double coolingRate) {
         this.ordering = ordering;
         this.adjacencyMatrix = adjacencyMatrix;
         this.temperature = temperature;
         this.coolingRate = coolingRate;
+        this.history = new ArrayList<>();
     }
 
     public Ordering run() {
         while(this.temperature > 0) {
             this.iterate();
+            this.iterations++;
         }
         return this.ordering;
     }
@@ -117,7 +123,14 @@ class SimulatedAnnealing {
 
         if(newOrdering.fitness(this.adjacencyMatrix) < this.ordering.fitness(this.adjacencyMatrix)) {
             this.ordering = new Ordering(newOrdering);
-            this.temperature = Math.floor(this.temperature - this.coolingRate);
+        }
+        this.temperature = this.temperature - this.coolingRate;
+        System.out.println(this.ordering.fitness(this.adjacencyMatrix));
+    }
+
+    public void printHistory() {
+        for(Double fitness : this.history) {
+            System.out.println(fitness);
         }
     }
 }
@@ -145,7 +158,7 @@ class Ordering {
     }
 
     private void setNodeCoordinates() {
-        double chunk = 2 * Math.PI / 2;
+        double chunk = 2 * Math.PI / this.nodes.size();
 
         for(int i = 0; i < this.nodes.size(); i++) {
             this.nodes.get(i).x = Math.cos(i * chunk);
@@ -222,20 +235,20 @@ class VizWindow extends JFrame {
     Ordering ordering;
     double chunk;
 
-    public VizWindow(int[][] adj, Ordering ordering) {
+    public VizWindow(int[][] adj, Ordering ordering, String title) {
         this.adj = adj;
         this.ordering = ordering;
         this.chunk = 2*Math.PI/this.ordering.getOrdering().size();
         this.v = this.ordering.getOrdering().size();
-        setTitle("AI");
+        setTitle(title);
         setSize(960, 960);
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
     public void paint(Graphics g) {
-        int radius = 100;
-        int mov = 200;
+        int radius = 300;
+        int mov = 400;
 
         double w = v;
 
