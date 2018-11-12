@@ -20,7 +20,7 @@ public class Main {
 
         Ordering finalOrdering = simulatedAnnealing.run();
         System.out.println(finalOrdering.fitness(adjacencyMatrix));
-        new VizWindow(adjacencyMatrix, initialOrdering, "Initial");
+        // new VizWindow(adjacencyMatrix, initialOrdering, "Initial");
         new VizWindow(adjacencyMatrix, finalOrdering, "Final");
     }
 
