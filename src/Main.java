@@ -16,7 +16,14 @@ public class Main {
 
         System.out.println(initialOrdering.fitness(adjacencyMatrix));
 
-        SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing(adjacencyMatrix, initialOrdering, 10, 0.0001);
+        ParamInputWindow pw = new ParamInputWindow();
+        int result = JOptionPane.showConfirmDialog(null, pw.getPanel(), "Please choose the values", JOptionPane.OK_CANCEL_OPTION);
+
+        if(result != JOptionPane.OK_OPTION) {
+            return;
+        }
+
+        SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing(adjacencyMatrix, initialOrdering, pw.getTemperature(), pw.getCoolingRate());
 
         Ordering finalOrdering = simulatedAnnealing.run();
         System.out.println(finalOrdering.fitness(adjacencyMatrix));
@@ -253,5 +260,38 @@ class VizWindow extends JFrame {
                 }
             }
         }
+    }
+}
+
+class ParamInputWindow {
+    JTextField temperature;
+    JTextField coolingRate;
+    JPanel panel;
+
+    public ParamInputWindow() {
+        this.temperature = new JTextField(10);
+        this.coolingRate = new JTextField(10);
+
+        this.panel = new JPanel();
+
+        this.panel.add(new JLabel("Temperature"));
+        this.panel.add(this.temperature);
+
+        this.panel.add(Box.createHorizontalStrut(15));
+
+        this.panel.add(new JLabel("Cooling rate"));
+        this.panel.add(this.coolingRate);
+    }
+
+    public JPanel getPanel() {
+        return this.panel;
+    }
+
+    public double getTemperature() {
+        return Double.parseDouble(this.temperature.getText());
+    }
+
+    public double getCoolingRate() {
+        return Double.parseDouble(this.coolingRate.getText());
     }
 }
