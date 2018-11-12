@@ -16,7 +16,7 @@ public class Main {
 
         System.out.println(initialOrdering.fitness(adjacencyMatrix));
 
-        SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing(adjacencyMatrix, initialOrdering, 5, 0.005);
+        SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing(adjacencyMatrix, initialOrdering, 10, 0.0001);
 
         Ordering finalOrdering = simulatedAnnealing.run();
         System.out.println(finalOrdering.fitness(adjacencyMatrix));
