@@ -96,8 +96,6 @@ class SimulatedAnnealing {
     private double temperature;
     private double coolingRate;
     private ArrayList<Double> history;
-    private final int MAX_ITERATIONS = 100000;
-    private int iterations = 0;
 
     public SimulatedAnnealing(int[][] adjacencyMatrix, Ordering ordering, double temperature, double coolingRate) {
         this.ordering = ordering;
@@ -110,7 +108,6 @@ class SimulatedAnnealing {
     public Ordering run() {
         while(this.temperature > 0) {
             this.iterate();
-            this.iterations++;
         }
         return this.ordering;
     }
