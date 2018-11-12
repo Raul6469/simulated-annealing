@@ -95,14 +95,12 @@ class SimulatedAnnealing {
     private int[][] adjacencyMatrix;
     private double temperature;
     private double coolingRate;
-    private ArrayList<Double> history;
 
     public SimulatedAnnealing(int[][] adjacencyMatrix, Ordering ordering, double temperature, double coolingRate) {
         this.ordering = ordering;
         this.adjacencyMatrix = adjacencyMatrix;
         this.temperature = temperature;
         this.coolingRate = coolingRate;
-        this.history = new ArrayList<>();
     }
 
     public Ordering run() {
@@ -120,15 +118,9 @@ class SimulatedAnnealing {
 
         if(newOrdering.fitness(this.adjacencyMatrix) < this.ordering.fitness(this.adjacencyMatrix)) {
             this.ordering = new Ordering(newOrdering);
+            System.out.println(this.ordering.fitness(adjacencyMatrix));
         }
         this.temperature = this.temperature - this.coolingRate;
-        System.out.println(this.ordering.fitness(this.adjacencyMatrix));
-    }
-
-    public void printHistory() {
-        for(Double fitness : this.history) {
-            System.out.println(fitness);
-        }
     }
 }
 
