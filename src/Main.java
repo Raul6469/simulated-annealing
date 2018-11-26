@@ -9,12 +9,10 @@ public class Main {
     public static void main(String[] args) {
         ArrayList<int[]> connections = readEdgeListFile("GA2018-19.txt");
         int[][] adjacencyMatrix = createAdjacencyMatrix(connections);
-        printMatrix(adjacencyMatrix);
+        // printMatrix(adjacencyMatrix);
 
         Ordering initialOrdering = new Ordering(adjacencyMatrix.length);
-        initialOrdering.printOrdering();
-
-        System.out.println(initialOrdering.fitness(adjacencyMatrix));
+        // initialOrdering.printOrdering();
 
         ParamInputWindow pw = new ParamInputWindow();
         int result = JOptionPane.showConfirmDialog(null, pw.getPanel(), "Please choose the values", JOptionPane.OK_CANCEL_OPTION);
